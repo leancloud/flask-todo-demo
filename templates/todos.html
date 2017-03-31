@@ -77,6 +77,6 @@
     <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> {% if todos|length == 1 %}只剩下最后{% else %}共{% endif %} {{ todos|length }} 个 todo。</p>
   {% endif %}
   <script type="text/javascript">
-  document.onready = function() {document.getElementById('todo-content')[0].focus()}()
+  document.onready = function() {document.getElementById('todo-content').focus()}()
   </script>
   {% endblock %}
