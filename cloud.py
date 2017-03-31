@@ -4,6 +4,7 @@ from datetime import datetime
 from datetime import timedelta
 
 from leancloud import Object
+from leancloud import ACL
 from leancloud import Engine
 from leancloud import LeanEngineError
 
@@ -20,6 +21,13 @@ def before_todo_save(todo):
         raise LeanEngineError('内容不能为空')
     if len(content) >= 240:
         todo.set('content', content[:240] + ' ...')
+    author = todo.get('author')
+    if author:
+        acl = ACL()
+        acl.set_public_read_access(True)
+        acl.set_read_access(author.id, True)
+        acl.set_write_access(author.id, True)
+        todo.set_acl(acl)
 
 
 @engine.define

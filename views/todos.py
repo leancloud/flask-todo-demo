@@ -44,11 +44,6 @@ def add():
     author = User.get_current()
     if author:
         todo.set('author', author)  # 关联 todo 的作者
-        acl = ACL()
-        acl.set_public_read_access(True)
-        acl.set_read_access(author, True)
-        acl.set_write_access(author, True)
-        todo.set_acl(acl)  # 设置 ACL
     try:
         todo.save()
     except LeanCloudError as e:
