@@ -23,7 +23,7 @@ Flask Todo Demo 是一个 [LeanCloud][4] 应用。在部署上线之前，需要
 简单来讲：
 
 ```bash
-$ git clone https://github.com/nervouna/Cuneiform.git && cd Cuneiform
+$ git clone https://github.com/leancloud/flask-todo-demo.git && cd flask-todo-demo
 $ virtualenv venv --python=python3 && source venv/bin/activate
 $ (venv) pip install -r requirements.txt
 $ (venv) lean login
@@ -43,7 +43,7 @@ $ (venv) lean deploy
 
 在现在这个函数里，当一个 todo 的 `content` 超过 240 个字，我们就会将其截断，并在最后加上「...」。这显然不是最好的办法；如果你有兴趣，可以尝试 fork 代码之后自己修改成更好的处理方法。
 
-除了在对象保存之前进行预处理，你还可以调用很多其他 Hook。想要了解更多，可以参考 [Hook 函数文档][13]
+除了在对象保存之前进行预处理，你还可以调用很多其他 Hook。想要了解更多，可以参考 [Hook 函数文档][13]。
 
 ### 定时任务
 
@@ -55,7 +55,7 @@ $ (venv) lean deploy
 
 将代码部署到云引擎之后，你就可以前往 LeanCloud 控制台，在云引擎 > 定时任务中创建一个定时器。定时器的运行规则用 cron 表达式来定义，这里我们希望它每天凌晨 12 点运行一次，那么 cron 表达式就应当写作 `0 0 0 * * ?`。
 
-定时任务可以帮你自动做很多事情，想要了解更多，可以参考 [定时器文档][14]。
+定时任务可以帮你自动做很多事情，想要了解更多，可以参考 [定时任务文档][14]。
 
 ## 其他语言的 Demo
 
