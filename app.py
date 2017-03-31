@@ -3,10 +3,11 @@
 import os
 
 from flask import Flask
-from flask import render_template
 from flask import redirect
 from flask import url_for
 from flask import g
+from flask import request
+from flask import send_from_directory
 from werkzeug import Request
 import leancloud
 
@@ -58,3 +59,7 @@ def before_request():
 @app.route('/')
 def index():
     return redirect(url_for('todos.show'))
+
+@app.route('/robots.txt')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
