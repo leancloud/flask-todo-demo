@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>注册 - Flask Todo Demo</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <meta name="viewport" content="width:device-width,initial-scale=1.0,user-scalable=no">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row" style="margin-top: 10vh;">
+        <div class="col-md-4 col-md-offset-4">
+          <ol class="breadcrumb">
+            <li><a href="{{ url_for('index') }}">LeanTodo</a></li>
+            <li class="active">注册</li>
+          </ol>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                  {% for message in messages %}
+                    <p class="text-danger"><span class="glyphicon glyphicon-remove-sign"></span> {{ message }}</p>
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
+              <form action="{{ url_for('users.register') }}" method="post">
+                <div class="form-group">
+                  <input class="form-control" placeholder="用户名" type="text" name="username">
+                </div>
+                <div class="form-group">
+                  <input class="form-control" placeholder="密码" type="password" name="password">
+                </div>
+                <input class="btn btn-default" type="submit" name="" value="登录">
+              </form>
+            </div>
+            <div class="panel-footer">已经有了账户？<a href="{{ url_for('users.login') }}">去登录</a></div>
+          </div>
+          <p class="text-muted">Powered by <a href="https://leancloud.cn">LeanCloud</a> | Runs on <a href="https://leancloud.cn/docs/leanengine_overview.html">LeanEngine</a></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %} - Flask Todo Demo</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <meta name="viewport" content="width:device-width,initial-scale=1.0,user-scalable=no">
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-set" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{ url_for('index') }}">LeanTodo</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse-set">
+          <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('todos.show') }}">Todo List</a></li>
+            <li><a target="_blank" href="https://github.com/leancloud/flask-todo-demo">说明 <small><span class="glyphicon glyphicon-new-window"></span></small></a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if g.user %}
+            <li><a href="{{ url_for('users.logout') }}">登出</a></li>
+            {% else %}
+            <li><a href="{{ url_for('users.login') }}">登录</a></li>
+            <li><a href="{{ url_for('users.register') }}">注册</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-info">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% block content %}
+      {% endblock %}
+  </div>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.slim.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+</body>
+</html>
