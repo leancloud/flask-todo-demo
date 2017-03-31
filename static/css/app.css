@@ -4,3 +4,4 @@
 .todo-delete {cursor:pointer;}
 .todo-category-switch {margin-bottom:1em;}
 .login, .register {margin-top:10vh;}
+.navbar-brand>img {display:inline-block;width:20px;height:20px;}
