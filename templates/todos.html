@@ -12,11 +12,15 @@
       </div>
     </form>
     {% if not g.user %}
-    <div class="alert alert-info" style="margin: 1vh 0">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-      <span class="glyphicon glyphicon-info-sign"></span> 未登录状态下创建的 todo 可以被所有人看到并修改、删除。<a class="alert-link" href="{{ url_for('users.login') }}">登录</a> 后可以创建只有自己可见的 todo。
-    </div>
+      <div class="alert alert-info" style="margin: 1vh 0">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        <span class="glyphicon glyphicon-info-sign"></span> 未登录状态下创建的 todo 可以被所有人看到并修改、删除。<a class="alert-link" href="{{ url_for('users.login') }}">登录</a> 后可以创建只有自己可见的 todo。
+      </div>
     {% endif %}
+  </div>
+  <div class="btn-group" style="margin-bottom: 1em;">
+    <a class="btn btn-default{% if status == 0 %} active{% endif %}" href="{{ url_for('todos.show') }}">未完成</a>
+    <a class="btn btn-default{% if status == 1 %} active{% endif %}" href="{{ url_for('todos.show', status=1) }}">已完成</a>
   </div>
   {% if not todos %}
     {% if status == 0 %}
@@ -34,10 +38,6 @@
     {% endif %}
   {% else %}
     {% if status == 0 %}
-      <div class="btn-group" style="margin-bottom: 1em;">
-        <a class="btn btn-default active" href="{{ url_for('todos.show') }}">未完成</a>
-        <a class="btn btn-default" href="{{ url_for('todos.show', status=1) }}">已完成</a>
-      </div>
       <ul class="list-group">
         {% for todo in todos %}
           <li class="list-group-item">
@@ -51,10 +51,6 @@
         {% endfor %}
       </ul>
     {% else %}
-      <div class="btn-group" style="margin-bottom: 1em;">
-        <a class="btn btn-default" href="{{ url_for('todos.show') }}">未完成</a>
-        <a class="btn btn-default active" href="{{ url_for('todos.show', status=1) }}">已完成</a>
-      </div>
       <ul class="list-group">
         {% for todo in todos %}
           <li class="list-group-item">
