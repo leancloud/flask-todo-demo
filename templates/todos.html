@@ -1,82 +1,83 @@
 {% extends "layout.html" %}
+{% set active = 'todos' -%}
 {% block title %}todo 列表{% endblock %}
 {% block content %}
   <div class="page-header">
-    <h1>{% if todos %}再{% endif %}添加一个 Todo</h1>
-    <form action="/todos" method="post">
-      <div class="input-group">
-        <input id="todo-content" class="form-control input-lg" type="text" name="content" placeholder="输入 todo 的内容……" />
-        <span class="input-group-btn">
-          <button class="btn btn-success btn-lg" type="button" onclick=submit()><span class="glyphicon glyphicon-chevron-right"></span></button>
-        </span>
-      </div>
-    </form>
-    {% if not g.user %}
-      <div class="alert alert-info alert-box">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        <p>未登录状态下创建的 todo 可以被所有人看到并修改或删除，<a class="alert-link" href="{{ url_for('users.login') }}">登录</a> 后创建的 todo 则只有自己可修改、删除。想要让自己创建的 todo 对其他人不可见，在代码中移除 <code>acl.set_public_read_access(True)</code> 这一行即可。</p>
-      </div>
-    {% endif %}
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-warning alert-box">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-            {{ message }}
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+    <h1>Flask Todo Demo</h1>
   </div>
-  <div class="btn-group todo-category-switch">
-    <a class="btn btn-default{% if status == 0 %} active{% endif %}" href="{{ url_for('todos.show') }}">未完成</a>
-    <a class="btn btn-default{% if status == 1 %} active{% endif %}" href="{{ url_for('todos.show', status=1) }}">已完成</a>
+  <form action="/todos" method="post">
+    <div class="input-group">
+      <input id="todo-content" class="form-control input-lg" type="text" name="content" placeholder="新建一个待办事项……" />
+      <span class="input-group-btn">
+        <button class="btn btn-success btn-lg" type="button" onclick=submit()><span class="glyphicon glyphicon-chevron-right"></span></button>
+      </span>
+    </div>
+  </form>
+  {% if not g.user %}
+    <div class="alert alert-info alert-box">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</span></button>
+    <p>未登录状态下创建的 todo 可以被所有人看到并修改或删除，<a class="alert-link" href="{{ url_for('users.login') }}">登录</a> 后创建的 todo 则只有自己可修改、删除。想要让自己创建的 todo 对其他人不可见，在代码中移除 <code>acl.set_public_read_access(True)</code> 这一行即可。</p>
   </div>
-  {% if not todos %}
-    {% if status == 0 %}
-      <div class="list-empty">
-        <p class="text-center large-emoji">🎉</p>
-        <p class="text-center lead">All Done!</p>
-        <p class="text-center"><a class="text-muted" href="{{ url_for('todos.show', status=1) }}">查看已完成的 todo</a> 或者 <a class="text-muted" href="#" onclick=document.getElementById('todo-content').focus()>创建一个新的 todo</span></p>
-      </div>
-      {% elif status == 1 %}
-      <div class="list-empty">
-        <p class="text-center large-emoji">🤔</p>
-        <p class="text-center lead">Wow. Nothing's Done Here.</p>
-        <p class="text-center"><a class="text-muted" href="{{ url_for('todos.show', status=0) }}">去看看未完成的 todo</a></p>
-      </div>
-    {% endif %}
-  {% else %}
-    {% if status == 0 %}
-      <ul class="list-group">
-        {% for todo in todos %}
-          <li class="list-group-item">
-            <form class="pull-right" action="{{ url_for('todos.delete', todo_id=todo.id, METHOD='DELETE', status=0) }}" method="post" id=delete-{{todo.id}}>
-              <span onclick=document.getElementById('delete-{{todo.id}}').submit() class="glyphicon glyphicon-trash todo-delete"></span>
-            </form>
-            <form action="{{ url_for('todos.done', todo_id=todo.id, status=0) }}" method="post" id="done-{{todo.id}}">
-              <span onclick=document.getElementById('done-{{todo.id}}').submit() class="glyphicon glyphicon-unchecked"></span> {{ todo.get('content') }}
-            </form>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <ul class="list-group">
-        {% for todo in todos %}
-          <li class="list-group-item">
-            <form class="pull-right" action="{{ url_for('todos.delete', todo_id=todo.id, METHOD='DELETE', status=1) }}" method="post" id=delete-{{todo.id}}>
-              <span onclick=document.getElementById('delete-{{todo.id}}').submit() class="glyphicon glyphicon-trash todo-delete"></span>
-            </form>
-            <form action="{{ url_for('todos.undone', todo_id=todo.id, status=1) }}" method="post" id="undone-{{todo.id}}">
-              <span onclick=document.getElementById('undone-{{todo.id}}').submit() class="glyphicon glyphicon-check text-muted"></span> <del class="text-muted">{{ todo.get('content') }}</del>
-            </form>
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-    <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> {% if todos|length == 1 %}只剩下最后{% else %}共{% endif %} {{ todos|length }} 个 todo。</p>
-  {% endif %}
-  <script type="text/javascript">
-  document.onready = function() {document.getElementById('todo-content').focus()}()
-  </script>
-  {% endblock %}
+{% endif %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-warning alert-box">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</span></button>
+    {{ message }}
+  </div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="btn-group todo-category-switch">
+<a class="btn btn-default{% if status == 0 %} active{% endif %}" href="{{ url_for('todos.show') }}">未完成</a>
+<a class="btn btn-default{% if status == 1 %} active{% endif %}" href="{{ url_for('todos.show', status=1) }}">已完成</a>
+</div>
+{% if not todos %}
+{% if status == 0 %}
+<div class="list-empty">
+  <p class="text-center large-emoji">🎉</p>
+  <p class="text-center lead">All Done!</p>
+  <p class="text-center"><a class="text-muted" href="{{ url_for('todos.show', status=1) }}">查看已完成的 todo</a> 或者 <a class="text-muted" href="#" onclick=document.getElementById('todo-content').focus()>创建一个新的 todo</span></p>
+</div>
+{% elif status == 1 %}
+<div class="list-empty">
+  <p class="text-center large-emoji">🤔</p>
+  <p class="text-center lead">Wow. Nothing's Done Here.</p>
+  <p class="text-center"><a class="text-muted" href="{{ url_for('todos.show', status=0) }}">去看看未完成的 todo</a></p>
+</div>
+{% endif %}
+{% else %}
+{% if status == 0 %}
+<ul class="list-group">
+  {% for todo in todos %}
+    <li class="list-group-item">
+      <form class="pull-right" action="{{ url_for('todos.delete', todo_id=todo.id, METHOD='DELETE', status=0) }}" method="post" id=delete-{{todo.id}}>
+        <span onclick=document.getElementById('delete-{{todo.id}}').submit() class="glyphicon glyphicon-trash todo-delete"></span>
+      </form>
+      <form action="{{ url_for('todos.done', todo_id=todo.id, status=0) }}" method="post" id="done-{{todo.id}}">
+        <span onclick=document.getElementById('done-{{todo.id}}').submit() class="glyphicon glyphicon-unchecked"></span> {{ todo.get('content') }}
+      </form>
+    </li>
+  {% endfor %}
+</ul>
+{% else %}
+<ul class="list-group">
+  {% for todo in todos %}
+    <li class="list-group-item">
+      <form class="pull-right" action="{{ url_for('todos.delete', todo_id=todo.id, METHOD='DELETE', status=1) }}" method="post" id=delete-{{todo.id}}>
+        <span onclick=document.getElementById('delete-{{todo.id}}').submit() class="glyphicon glyphicon-trash todo-delete"></span>
+      </form>
+      <form action="{{ url_for('todos.undone', todo_id=todo.id, status=1) }}" method="post" id="undone-{{todo.id}}">
+        <span onclick=document.getElementById('undone-{{todo.id}}').submit() class="glyphicon glyphicon-check text-muted"></span> <del class="text-muted">{{ todo.get('content') }}</del>
+      </form>
+    </li>
+  {% endfor %}
+</ul>
+{% endif %}
+<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> {% if todos|length == 1 %}只剩下最后{% else %}共{% endif %} {{ todos|length }} 个 todo。</p>
+{% endif %}
+<script type="text/javascript">
+document.onready = function() {document.getElementById('todo-content').focus()}()
+</script>
+{% endblock %}

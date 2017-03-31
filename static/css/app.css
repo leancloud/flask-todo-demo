@@ -2,6 +2,6 @@
 .list-empty {margin:10vh 0;}
 .large-emoji {font-size:10vh;}
 .todo-delete {cursor:pointer;}
-.todo-category-switch {margin-bottom:1em;}
+.todo-category-switch {margin:1em 0;}
 .login, .register {margin-top:10vh;}
-.navbar-brand>img {display:inline-block;width:20px;height:20px;}
+.navbar-brand>img {display:block;width:1em;height:auto;}

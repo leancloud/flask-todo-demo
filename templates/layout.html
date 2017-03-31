@@ -24,8 +24,9 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse-set">
           <ul class="nav navbar-nav">
-            <li><a href="{{ url_for('todos.show') }}">Todo List</a></li>
-            <li><a target="_blank" href="https://github.com/leancloud/flask-todo-demo">说明 <small><span class="glyphicon glyphicon-new-window"></span></small></a></li>
+            {% set active = active|default('todos') -%}
+            <li {% if active == 'todos' %}class="active"{% endif %}><a href="{{ url_for('todos.show') }}">Todo List</a></li>
+            <li {% if active == 'readme' %}class="active"{% endif %}><a href="{{ url_for('readme') }}">说明</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if g.user %}
@@ -41,8 +42,12 @@
     <div class="container">
       {% block content %}
       {% endblock %}
-  </div>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.slim.min.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+      <footer class="page-footer">
+        <hr>
+        <p class="text-muted">Powered by <a href="https://leancloud.cn">LeanCloud</a> | Runs on <a href="https://leancloud.cn/docs/leanengine_overview.html">LeanEngine</a></p>
+      </footer>
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.slim.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 </body>
 </html>
