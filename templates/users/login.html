@@ -3,11 +3,12 @@
   <head>
     <title>登录 - Flask Todo Demo</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
     <meta name="viewport" content="width:device-width,initial-scale=1.0,user-scalable=no">
   </head>
   <body>
-    <div class="container">
-      <div class="row" style="margin-top: 10vh;">
+    <div class="container login">
+      <div class="row">
         <div class="col-md-4 col-md-offset-4">
           <ol class="breadcrumb">
             <li><a href="{{ url_for('index') }}">LeanTodo</a></li>
