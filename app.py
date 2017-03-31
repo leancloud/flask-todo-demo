@@ -8,6 +8,8 @@ from flask import url_for
 from flask import g
 from flask import request
 from flask import send_from_directory
+from flask import flash
+from flask import Markup
 from werkzeug import Request
 import leancloud
 
@@ -17,7 +19,11 @@ from views.users import users_view
 
 app = Flask(__name__)
 app.config.update(dict(PREFERRED_URL_SCHEME='https'))
-app.secret_key = bytes(os.environ.get('SECRET_KEY'), 'utf-8')
+try:
+    app.secret_key = bytes(os.environ.get('SECRET_KEY'), 'utf-8')
+except TypeError:
+    import sys
+    sys.exit('未检测到密钥。请在 LeanCloud 控制台 > 云引擎 > 设置中新增一个名为 SECRET_KEY 的环境变量，再重试部署。')
 
 
 class HTTPMethodOverrideMiddleware(object):
