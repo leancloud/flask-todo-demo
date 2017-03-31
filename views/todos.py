@@ -28,9 +28,8 @@ def show():
     try:
         todos = Query(Todo).add_descending('createdAt').equal_to('status', status).find()
     except LeanCloudError as e:
-        if e.code == 101:  # 服务端对应的 Class 还没创建
-            todos = []
-        else:
+        todos = []
+        if e.code != 101:  # Code 101 是指服务端对应的 Class 还没创建
             flash(e.error)
     return render_template('todos.html', todos=todos, status=status)
 
@@ -46,8 +45,9 @@ def add():
     if author:
         todo.set('author', author)  # 关联 todo 的作者
         acl = ACL()
-        acl.set_write_access(author, True)
+        acl.set_public_read_access(True)
         acl.set_read_access(author, True)
+        acl.set_write_access(author, True)
         todo.set_acl(acl)  # 设置 ACL
     try:
         todo.save()
