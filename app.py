@@ -10,6 +10,7 @@ from flask import request
 from flask import send_from_directory
 from flask import flash
 from flask import Markup
+from flask import render_template
 from werkzeug import Request
 import leancloud
 
@@ -65,6 +66,11 @@ def before_request():
 @app.route('/')
 def index():
     return redirect(url_for('todos.show'))
+
+
+@app.route('/readme')
+def readme():
+    return render_template('readme.html')
 
 @app.route('/robots.txt')
 @app.route('/favicon.svg')

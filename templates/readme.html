@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% set active = 'readme' -%}
+{% block title %}说明文档{% endblock %}
+{% block content %}
+  <div class="page-header">
+    <h1>Flask Todo Demo <small>a Python port of the LeanEngine demo <a href="">LeanTodo</a>.</small></h1>
+  </div>
+  <div class="row">
+    <div class="col-md-9">
+      <article>
+        <h2 id="sec1">在开始之前</h2>
+        <p>Flask Todo Demo 是一个 <a href='https://leancloud.cn/docs/leanengine_overview.html' target='_blank'>LeanEngine</a> 的示例项目。它运行在 Python 3 上，依赖 <a href='http://flask.pocoo.org' target='_blank'>flask</a> 和 <a href='https://github.com/leancloud/python-sdk' target='_blank'>LeanCloud Python SDK</a>。
+        <p>由于 Flask Todo Demo 是一个 <a href='https://leancloud.cn/' target='_blank'>LeanCloud</a> 应用，在部署上线之前，需要先做一些准备工作。</p>
+        <ol start='' >
+          <li>在 <a href='https://leancloud.cn/dashboard/applist.html#/apps' target='_blank'>LeanCloud 控制台</a> 新建一个应用，并设置一个二级域名。</li>
+          <li>在控制台中新增一个名为 <code>SECRET_KEY</code> 的环境变量。</li>
+          <li>安装最新版的 <a href='https://github.com/leancloud/lean-cli/releases/latest' target='_blank'>LeanCloud 命令行工具</a>。如果你无法访问 GitHub，请移步 <a href='http://releases.leanapp.cn/#/leancloud/lean-cli/releases'>国内镜像</a>。</li>
+        </ol>
+        <blockquote>
+          <p>为了保证安全性，我们不建议将密钥（<code>SECRET_KEY</code>）写死在代码中，而是推荐将其设置为云引擎运行环境的环境变量。如果没有设置 <code>SECRET_KEY</code> 环境变量，部署时代码 <a class="alert-link" href="https://github.com/leancloud/flask-todo-demo/commit/ec05b058a4f37082fef9bc527c89726724ef3110#diff-3f41e546893dc64b71aaacad12cad815R26">将会抛出一个异常</a>。</p><p>关于如何创建一个好的密钥，请参考 <a class="alert-link" href='https://gist.github.com/nervouna/cd58fb09c22826eaaff996793de72d85' target='_blank'>这个 gist</a>。</p>
+        </blockquote>
+        <h2 id="sec2">部署方法</h2>
+        <p>首先将 Flask Todo Demo 的代码克隆到本地。在终端中打开项目所在目录，输入 <code>lean login</code>，然后 <code>lean checkout</code>，根据提示操作，就可以将本地的项目与刚刚在 LeanCloud 上创建的应用链接起来。</p>
+        <p>使用 <a href='https://github.com/pypa/virtualenv' target='_blank'>virtualenv</a> 来为这个应用创建一个隔离的 Python 运行环境。激活虚拟环境，然后用 <code>pip</code> 来安装所需的依赖。</p>
+        <p>用 <code>lean deploy</code> 命令将代码部署到 LeanCloud 上。部署完成之后，就可以在浏览器中输入刚才设置的域名，打开线上运行的网站了。</p>
+        <p>简单来讲：</p>
+        <pre>
+$ git clone https://github.com/leancloud/flask-todo-demo.git &amp;&amp; cd flask-todo-demo
+$ virtualenv venv --python=python3 &amp;&amp; source venv/bin/activate
+$ (venv) pip install -r requirements.txt
+$ (venv) lean login
+$ (venv) lean checkout
+$ (venv) lean deploy
+        </pre>
+        <h2 id="sec3">如何调试？</h2>
+        <p>在本地调试，请使用 <code>lean up</code> 命令，然后在 <code>http://localhost:3000</code> 查看本地运行实例。如果你使用了虚拟环境，请先激活对应的虚拟环境。</p>
+        <h2 id="sec4">高级技巧</h2>
+        <h3>Hook 函数</h3>
+        <p>在 <code>cloud.py</code> 中有一个 <code>before_todo_save</code> 函数，它的上一行是 <code>@engine.before_save(&#39;Todo&#39;)</code>，说明这是一个 Hook 函数。当一个新的 <code>Todo</code> 将要被保存到数据之前，LeanCloud 会自动调用这个函数，你可以利用它来检查数据的有效性。</p>
+        <p>在现在这个函数里，当一个 todo 的 <code>content</code> 超过 240 个字，我们就会将其截断，并在最后加上「...」。这显然不是最好的办法；如果你有兴趣，可以尝试 fork 代码之后自己修改成更好的处理方法。</p>
+        <p>除了在对象保存之前进行预处理，你还可以调用很多其他 Hook。想要了解更多，可以参考 <a href='https://leancloud.cn/docs/leanengine_cloudfunction_guide-python.html#Hook_函数' target='_blank'>Hook 函数文档</a>。</p>
+        <h3>定时任务</h3>
+        <p><code>cloud.py</code> 中的另一个函数是 <code>empty_trash</code>，它会筛选出 <code>status</code> 为 <code>-1</code> 且最后一次更新时间是 30 天之前的 todo 并删除。</p>
+        <p>这是一个云函数，你可以在项目中通过 <code>leancloud.cloudfunc.run(&#39;empty_trash&#39;)</code> 来手动调用它，但显然自动化是更好的方案。</p>
+        <p>为了实现自动化，我们可以在 LeanCloud 控制台设置一个定时任务，让这个函数每天凌晨都自动运行一次。</p>
+        <p>将代码部署到云引擎之后，你就可以前往 LeanCloud 控制台，在云引擎 &gt; 定时任务中创建一个定时器。定时器的运行规则用 cron 表达式来定义，这里我们希望它每天凌晨 12 点运行一次，那么 cron 表达式就应当写作 <code>0 0 0 * * ?</code>。</p>
+        <p>定时任务可以帮你自动做很多事情，想要了解更多，可以参考 <a href='https://leancloud.cn/docs/leanengine_cloudfunction_guide-python.html#定时任务' target='_blank'>定时任务文档</a>。</p>
+        <h2 id="sec5">其他语言的 Demo</h2>
+        <p>请参考 <a href='https://leancloud.cn/docs/demo.html#/web' target='_blank'>LeanCloud 开源 Demo</a></p>
+        <h2 id="sec6">Miscellaneous</h2>
+        <ul>
+          <li>License: <a href='https://github.com/leancloud/flask-todo-demo/blob/master/LICENSE' target='_blank'>MIT</a></li>
+          <li>Author: GUAN Xiaoyu (<a href='mailto:guanxy@me.com' target='_blank'>guanxy@me.com</a>)</li>
+        </ul>
+      </article>
+    </div>
+    <div class="col-md-3">
+      <h2>目录</h2>
+      <ul class="list-unstyled">
+        <li><a href="#sec1">在开始之前</a></li>
+        <li><a href="#sec2">部署方法</a></li>
+        <li><a href="#sec3">如何调试？</a></li>
+        <li><a href="#sec4">高级技巧</a></li>
+        <li><a href="#sec5">其他语言的 Demo</a></li>
+        <li><a href="#sec6">Miscellaneous</a></li>
+      </ul>
+      <h2>一些链接</h2>
+      <ul class="list-unstyled">
+        <li><a target='_blank' href="https://leancloud.cn">LeanCloud</a></li>
+        <li><a target='_blank' href="https://github.com/leancloud/flask-todo-demo">GitHub Repo</a></li>
+        <li><a target='_blank' href="https://leancloud.cn/docs/leanengine_overview.html">云引擎介绍</a></li>
+        <li><a target='_blank' href="https://flask.pocoo.org">Flask：一个轻量级 Web 框架</a></li>
+        <li><a target='_blank' href="https://github.com/leancloud/python-sdk">LeanCloud Python SDK</a></li>
+      </ul>
+    </div>
+  </div>
+{% endblock %}
