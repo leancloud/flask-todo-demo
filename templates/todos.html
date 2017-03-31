@@ -14,10 +14,19 @@
     {% if not g.user %}
       <div class="alert alert-info" style="margin: 1vh 0">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-          <p>未登录状态下创建的 todo 可以被所有人看到并修改或删除，<a class="alert-link" href="{{ url_for('users.login') }}">登录</a> 后创建的 todo 则只有自己可修改、删除。想要让自己创建的 todo 对其他人不可见，在代码中移除 <code>acl.set_public_read_access(True)</code> 这一行即可。</p>
-        </ul>
+        <p>未登录状态下创建的 todo 可以被所有人看到并修改或删除，<a class="alert-link" href="{{ url_for('users.login') }}">登录</a> 后创建的 todo 则只有自己可修改、删除。想要让自己创建的 todo 对其他人不可见，在代码中移除 <code>acl.set_public_read_access(True)</code> 这一行即可。</p>
       </div>
     {% endif %}
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
   </div>
   <div class="btn-group" style="margin-bottom: 1em;">
     <a class="btn btn-default{% if status == 0 %} active{% endif %}" href="{{ url_for('todos.show') }}">未完成</a>
@@ -70,4 +79,4 @@
   <script type="text/javascript">
   document.onready = function() {document.getElementById('todo-content')[0].focus()}()
   </script>
-{% endblock %}
+  {% endblock %}
