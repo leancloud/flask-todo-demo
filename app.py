@@ -68,9 +68,9 @@ def index():
     return redirect(url_for('todos.show'))
 
 
-@app.route('/readme')
-def readme():
-    return render_template('readme.html')
+@app.route('/help')
+def help():
+    return render_template('help.html')
 
 @app.route('/robots.txt')
 @app.route('/favicon.svg')
