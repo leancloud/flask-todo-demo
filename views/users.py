@@ -17,7 +17,7 @@ users_view = Blueprint('users', __name__)
 def register():
     if request.method == 'GET':
         return render_template('users/register.html')
-    if request.method =='POST':
+    if request.method == 'POST':
         user = User()
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '').strip()

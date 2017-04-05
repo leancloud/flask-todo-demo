@@ -63,6 +63,7 @@ app.register_blueprint(users_view, url_prefix='/users')
 def before_request():
     g.user = leancloud.User.get_current()
 
+
 @app.route('/')
 def index():
     return redirect(url_for('todos.show'))
@@ -71,6 +72,7 @@ def index():
 @app.route('/help')
 def help():
     return render_template('help.html')
+
 
 @app.route('/robots.txt')
 @app.route('/favicon.svg')
