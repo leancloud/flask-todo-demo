@@ -25,12 +25,14 @@ TRASHED, PLANNED, COMPLETED = -1, 0, 1
 @todos_view.route('')
 def show():
     status = int(request.args.get('status', PLANNED))
+    if status == TRASHED:
+        flash('无法查看已删除的 Todo')
+        status = PLANNED
     try:
         todos = Query(Todo).add_descending('createdAt').equal_to('status', status).find()
     except LeanCloudError as e:
         todos = []
-        if e.code != 101:  # Code 101 是指服务端对应的 Class 还没创建
-            flash(e.error)
+        flash(e.error)
     return render_template('todos.html', todos=todos, status=status)
 
 
