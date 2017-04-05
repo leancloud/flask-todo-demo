@@ -25,7 +25,6 @@ application = engine
 if __name__ == '__main__':
     # 只在本地开发环境执行的代码
     from gevent.pywsgi import WSGIServer
-    from geventwebsocket.handler import WebSocketHandler
     from werkzeug.serving import run_with_reloader
     from werkzeug.debug import DebuggedApplication
 
@@ -34,7 +33,7 @@ if __name__ == '__main__':
         global application
         app.debug = True
         application = DebuggedApplication(application, evalex=True)
-        server = WSGIServer(('0.0.0.0', PORT), application, handler_class=WebSocketHandler)
+        server = WSGIServer(('0.0.0.0', PORT), application)
         server.serve_forever()
 
     run()
