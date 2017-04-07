@@ -53,10 +53,10 @@
   {% for todo in todos %}
     <li class="list-group-item">
       <form class="pull-right" action="{{ url_for('todos.delete', todo_id=todo.id, METHOD='DELETE', status=0) }}" method="post" id=delete-{{todo.id}}>
-        <span onclick=document.getElementById('delete-{{todo.id}}').submit() class="glyphicon glyphicon-trash todo-delete"></span>
+        <span class="glyphicon glyphicon-trash todo-delete"></span>
       </form>
       <form action="{{ url_for('todos.done', todo_id=todo.id, status=0) }}" method="post" id="done-{{todo.id}}">
-        <span onclick=document.getElementById('done-{{todo.id}}').submit() class="glyphicon glyphicon-unchecked"></span> {{ todo.get('content') }}
+        <span class="glyphicon glyphicon-unchecked"></span> {{ todo.get('content') }}
       </form>
     </li>
   {% endfor %}
@@ -66,10 +66,10 @@
   {% for todo in todos %}
     <li class="list-group-item">
       <form class="pull-right" action="{{ url_for('todos.delete', todo_id=todo.id, METHOD='DELETE', status=1) }}" method="post" id=delete-{{todo.id}}>
-        <span onclick=document.getElementById('delete-{{todo.id}}').submit() class="glyphicon glyphicon-trash todo-delete"></span>
+        <span class="glyphicon glyphicon-trash todo-delete"></span>
       </form>
       <form action="{{ url_for('todos.undone', todo_id=todo.id, status=1) }}" method="post" id="undone-{{todo.id}}">
-        <span onclick=document.getElementById('undone-{{todo.id}}').submit() class="glyphicon glyphicon-check text-muted"></span> <del class="text-muted">{{ todo.get('content') }}</del>
+        <span class="glyphicon glyphicon-check text-muted"></span> <del class="text-muted">{{ todo.get('content') }}</del>
       </form>
     </li>
   {% endfor %}
@@ -77,7 +77,4 @@
 {% endif %}
 <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> {% if todos|length == 1 %}只剩下最后{% else %}共{% endif %} {{ todos|length }} 个 todo。</p>
 {% endif %}
-<script type="text/javascript">
-document.onready = function() {document.getElementById('todo-content').focus()}()
-</script>
 {% endblock %}
