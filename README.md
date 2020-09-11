@@ -14,7 +14,7 @@ Flask Todo Demo 是一个 [LeanCloud][4] 应用。在部署上线之前，需要
 
 ## 部署方法
 
-首先将 Flask Todo Demo 的代码克隆到本地。在终端中打开项目所在目录，输入 `lean login`，然后 `lean checkout`，根据提示操作，就可以将本地的项目与刚刚在 LeanCloud 上创建的应用链接起来。
+首先将 Flask Todo Demo 的代码克隆到本地。在终端中打开项目所在目录，输入 `lean login`，然后 `lean switch`，根据提示操作，就可以将本地的项目与刚刚在 LeanCloud 上创建的应用链接起来。
 
 使用 [virtualenv][8] 来为这个应用创建一个隔离的 Python 运行环境。激活虚拟环境，然后用 `pip` 来安装所需的依赖。
 
@@ -27,7 +27,7 @@ $ git clone https://github.com/leancloud/flask-todo-demo.git && cd flask-todo-de
 $ virtualenv venv --python=python3 && source venv/bin/activate
 $ (venv) pip install -r requirements.txt
 $ (venv) lean login
-$ (venv) lean checkout
+$ (venv) lean switch
 $ (venv) lean deploy
 ```
 
